@@ -1,0 +1,4 @@
+<option value="" selected>انتخاب کنید</option>
+{% for subcategory in subcategory %}
+<option value="{{ subcategory.pk }}">{{ subcategory.name }}</option>
+{% endfor %}

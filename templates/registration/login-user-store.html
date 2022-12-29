@@ -1,0 +1,72 @@
+{% extends 'user/index.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load i18n static %}
+{% block content %}
+<div class="row justify-content-md-center">
+        <div class="col-lg-4">
+                <form method="POST">
+                        <fieldset>
+                                <legend>
+                                        <h5 class="mt-4">
+                                                <strong style="color: darkgray;">ورود به وبلاگ</strong> {{ store_login.name }}
+                                        </h5>
+                                </legend>
+                                {% if form.errors and not form.non_field_errors %}
+                                <p class="alert alert-danger"  align="center">
+                                {% if form.errors.items|length == 1 %}{% translate "Please correct the error below." %}{% else %}{% translate "Please correct the errors below." %}{% endif %}
+                                </p>
+                                {% endif %}
+
+                                {% if form.non_field_errors %}
+                                {% for error in form.non_field_errors %}
+                                <p class="alert alert-danger"  align="center">
+                                {{ error }}
+                                </p>
+                                {% endfor %}
+                                {% endif %}
+                                {% if user.is_authenticated %}
+                                <p class="alert alert-danger"  align="center">
+                                {% blocktranslate trimmed %}
+                                You are authenticated as {{ username }}, but are not authorized to
+                                access this page. Would you like to login to a different account?
+                                {% endblocktranslate %}
+                                </p>
+                                {% endif %}
+
+                                {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert {% if message.tags %} alert-{{ message.tags }}{% endif %}">{{ message|safe }}</div>
+                                {% endfor %}
+                                {% endif %}
+                                <input type="hidden" name="next" value="{{next|escape}}" />
+                                <div class="form-group {% if form.username.errors %}has_error{% elif form.is_bound %}has_success{% endif %}">
+                                        <label class="col-form-label mt-2" for="username">نام کاربری</label>
+                                        <input type="text" class="form-control" placeholder="نام کاربری" name="username" id="username">
+                                        {% if form.username.errors %}
+                                        {% for error in form.username.errors %}
+                                        <div  style="text-align: right;color:#dc3545;">
+                                                <b>{{ error|escape }}</b>    
+                                        </div>
+                                        {% endfor %}
+                                        {% endif %}
+                                </div>
+                                <div class="form-group {% if form.password.errors %}has_error{% elif form.is_bound %}has_success{% endif %}">
+                                        <label for="Password" class="form-label mt-4">رمز کاربر</label>
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="رمز کاربر">
+                                        {% if form.password.errors %}
+                                        {% for error in form.password.errors %}
+                                        <div  style="text-align: right;color:#dc3545;">
+                                                <b>{{ error|escape }}</b>    
+                                        </div>
+                                        {% endfor %}
+                                        {% endif %}
+                                </div>
+                                <br>
+                                <button type="submit" class="btn btn-primary">ورود</button>
+                                <a href="{% url 'signup_store' pk %}" class="btn btn-link">ثبت نام</a>
+                        </fieldset>
+                </form>
+        </div>
+</div>
+{% endblock %}
