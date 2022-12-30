@@ -1,0 +1,32 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+{% include 'carousel.html' %}  
+<div class="container">
+    <div class="row justify-content-md-center">
+        {% for stores in stores %}
+        <div class="col-lg-3">
+                <div class="card mb-3">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ stores.name }}</h5>
+                    <h6 class="card-subtitle text-muted">{{ stores.descreption|slice:26 }}...</h6>
+                    </div>
+                    {% if stores.image %}
+                    <img class="imge-card" src="{% static stores.image.url %}" alt="{{ stores.name }}">
+                    {% else %}
+                    <img class="imge-card" src="static/img/placeholder.png" alt="{{ stores.name }}">
+                    {% endif %}
+                    <div class="card-body">
+                    <p class="card-text" hidden>{{ stores.name }}</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                    </ul>
+                    <div class="card-body">
+                        <a target="_blank" href="{% url 'product-list-store' stores.pk %}" class="stretched-link">مشاهده</a>
+                    </div>
+                </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endblock %}
+</div>

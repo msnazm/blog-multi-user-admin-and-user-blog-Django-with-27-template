@@ -1,0 +1,111 @@
+{% extends 'user/index.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% load l10n %}
+{% block content %}
+<div class="row justify-content-md-center">
+  <div class="col-lg-10">
+    <div>
+      <div class="card-body">
+        <h5 class="card-title">{{ products.name }}</h5>
+        <h6 class="card-subtitle text-muted">{{ products.brand }}</h6>
+      </div>
+      <section>
+        <div class="row justify-content-md-center">
+          <img style="width: auto;height: auto;" src="{% static products.imageone.url %}" />
+        </div>
+      </section>
+      <div class="card-body">
+        <p class="card-text">{{ products.descreption|safe }}</p>
+      </div>
+      <div class="card-body">
+      {% for select_rating in select_rating %}
+        {{ select_rating.user.username }}
+      {% if select_rating.rating == 1 %}
+      <span class="fa fa-star checked"></span>
+      {% elif select_rating.rating == 2 %}
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      {% elif select_rating.rating == 3 %}
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      {% elif select_rating.rating == 4 %}
+      <i class="fa fa-star checked"></i>
+      <i class="fa fa-star checked"></i>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      {% elif select_rating.rating == 5 %}
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      <span class="fa fa-star checked"></span>
+      {% endif %}
+        <br>
+      {% if select_rating.confirmed == 1 %}
+        {{ select_rating.comment }}
+      {% else %}
+      {% if request.user.id %}
+        کاربر محترم نظر شما در حال بررسی می باشد.
+      {% endif %}
+      {% endif %}
+        <br>
+      {% endfor %}
+      </div>
+    </div>
+    <div id="flash">
+      {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+          {% if message.tags == "success" %}
+          <div class="alert alert-dismissible alert-success">
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          </div>
+          {% endif %}
+          {% if message.tags == "error" %}
+          <div class="alert alert-dismissible alert-danger"">
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          </div>
+          {% endif %}
+          {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+    <form method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="datecreate" id="id_datecreate"/>
+      <input type="hidden" name="datecreatealt" id="id_datecreatealt"/>
+      <input type="hidden" value="{{ request.user.id|default:''}}" name="user" id="id_user">
+      <input type="hidden" value="{{ products.pk }}" name="product" required="" id="id_product">
+    <div class="card" style="max-width: 400px;border-radius:0px;border-right: 0ch;border-left: 0ch;">
+      <div class="card-body">
+        <h4 class="card-title">ایجاد امتیاز</h4>
+        <div class="form-group">
+          <label for="rating" class="form-label mt-4">امتیاز</label>
+          <select class="form-control" name="rating" id="id_rating">
+            <option value="" selected>انتخاب کنید</option>
+            <option value="5">خیلی عالی</option>
+            <option value="4">عالی</option>
+            <option value="3">خیلی خوب</option>
+            <option value="2">خوب</option>
+            <option value="1">متوسط</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="comment" class="form-label mt-4">توضیحات</label>
+          <textarea class="form-control" name="comment" id="id_comment" rows="3"></textarea>
+        </div>
+        <br>
+        <button type="submit" name="Review_save" class="btn btn-info">ارسال</button>
+        </div>
+      </div>
+    </div>
+</div>
+<script type="text/javascript">
+  setTimeout(function () {
+   $('#flash').fadeOut('fast');
+   },3000);
+</script>
+{% endblock %}
