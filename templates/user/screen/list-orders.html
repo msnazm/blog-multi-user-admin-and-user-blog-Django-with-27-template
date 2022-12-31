@@ -1,0 +1,57 @@
+{% extends 'user/index.html' %}
+{% load static %}
+{% load humanize %}
+{% load l10n %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div>
+<a href="{% url 'dashboard' %}">
+     برگشت
+</a>
+        <div class="row justify-content-md-center">
+                <div class="col-lg-8">
+                        <fieldset>
+                                <legend><h1 class="title-page">لیست سفارشات شما</h1></legend>
+                                <table class="table table-hover">
+                                        <tr>
+                                                <th>تاریخ سفارش</th>
+                                                <th>تصویر</th>
+                                                <th>نام</th>
+                                                <th>قیمت</th>
+                                                <th>تعداد</th>
+                                                <th>جمع</th>
+                                                <th></th>
+                                        </tr>
+                                        {% for orders in orders %}
+                                        <tr>
+                                                <td>{{ orders.createdAt|naturaltime }}</td>
+                                                <td><img class="image-list" src="{% static orders.product.imageone.url %}" ></td>
+                                                <td>{{ orders.product.name }}</td>
+                                                <td>{{ orders.price }}</td>
+                                                <td>{{ orders.countInOrder }}</td>
+                                                <td>{{ orders.total }}</td>
+                                                <td>   
+                                                        <a class="fa fa-trash" style="color:red" href="{% url 'product-delete-order' orders.pk orders.store_id orders.product.slug %}" ></a>
+                                                </td>
+                                        {% empty %}
+                                        {% endfor %}
+                                        </tr>
+                                </table>
+                        </fieldset>
+                </div>
+                <div class="col-lg-4">
+                        <div class="card bg-secondary mb-4" style="max-width: 20rem;">
+                        <div class="card-header">پست های</div>
+                                <div class="card-body">
+                                        <h4 class="card-title">تعداد : {{ order_count }}</h4>
+                                        <h4 class="card-title">جمع کل : {{ order_sum_count.total_amount }}</h4>
+                                        <div class="dropdown-divider"></div>
+                                        <div class="text-center">
+                                                <a href="{% url 'shopping_create' shop.pk %}" class="btn btn-primary">ادامه دهید</a>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </div>
+{% endblock %}

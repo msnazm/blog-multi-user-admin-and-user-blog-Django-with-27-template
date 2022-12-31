@@ -1,0 +1,46 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div>
+<a href="{% url 'store-list' %}">
+     برگشت
+</a>
+        <div class="row justify-content-md-center">
+                <div class="col-lg-4">
+                        <div class="card mb-4">
+                                <div class="card-body">
+                                <h5 class="card-title">{{ store.name }}</h5>
+                                <h6 class="card-subtitle text-muted">{{ store.create_date|naturaltime }}</h6>
+                                </div>
+                                {% if store.image %}
+                                <img class="imge-card" src="{% static store.image.url %}" alt="{{ store.name }}">
+                                {% else %}
+                                <img class="imge-card" src="static/img/placeholder.png" alt="{{ store.name }}">
+                                {% endif %}
+                                <div class="card-body">
+                                <p class="card-text">{{ store.descreption|slice:20 }}</p>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                </ul>
+                                <div class="card-body">
+                                <a target="_blank" href="{% url 'product-list-store' store.pk %}" class="stretched-link"></a>
+                                <p>تاریخ ایجاد: {{ store.datecreate }}</p>
+                                {% if store.confirmed == 0 %}
+                                <span class="badge bg-warning">منتظر تایید</span>
+                                {% elif store.confirmed == 3 %}
+                                <span class="badge bg-danger">تایید نشده</span>
+                                {% else %}
+                                <span class="badge bg-success">تایید شده</span>
+                                {% endif %}
+                                </div>
+                        </div>
+                        {% if categ == 0 %}
+                        <h6>کاربر عزیز {{ request.user.username }} <a href="{% url 'category-create' store.pk %}">دسته اصلی</a> خود را ایجاد کنید.</h6> 
+                        {% endif %}
+                </div>
+        </div>
+</div>
+{% endblock %}

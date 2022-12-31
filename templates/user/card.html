@@ -1,0 +1,25 @@
+{% load static %}
+{% load humanize %}
+<div class="container">
+    <div class="row justify-content-md-center">
+    {% for products in products %}
+    <div class="col-lg-2">
+            <div class="card mb-2">
+                <div class="card-body">
+                <h6 class="card-title" style="text-align: center;">{{ products.name|slice:50 }}</h6>
+                <h6 class="card-subtitle text-muted">{{ products.create_date|naturaltime }}</h6>
+                </div>
+                {% if products.imageone %}
+                <img class="imge-card" src="{% static products.imageone.url %}" alt="{{ products.name }}">
+                {% else %}
+                <img class="imge-card" src="static/img/placeholder.png" alt="{{ products.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h6 class="card-text" style="text-align: center;">{{ products.category.name }}</h6>
+                    <a target="_blank" href="{% url 'product-details-store' products.pk products.store_id products.slug %}" class="stretched-link"></a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
